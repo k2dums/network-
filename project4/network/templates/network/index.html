@@ -1,5 +1,39 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    <div >
+        <div class="mb-5"><h1>All Posts</h1></div>
+        <div class="col mb-5">
+            <div class><h3>New posts</h3></div>
+            <div class><textarea rows="2" cols="200" style="width:40%;"></textarea></div>
+            <div><button class="btn-primary">Post</button></div>
+        </div>
+        <div class="post_wrapper col">
+            <div class="post mb-5">
+                <div class="post_user"><h5>Dummy_user</h5></div>
+                <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium temporibus earum, facilis, ipsam necessitatibus dolorum quidem, totam officia maxime nemo labore ratione in sequi tempore eveniet sunt amet beatae doloribus?</div>
+                <div class="post_time " style="color:grey;">March 29,2020, 11:40 p.m</div>
+                <div class="like_wrapper">
+                    <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                    <span class="like_count font-weight-bold">1</span>
+                </div>
+                <div class="comment_wrapper">
+                    <div style="color:grey;">Comments</div>
+                </div>
+            </div>
+            <div class="post mb-5">
+                <div class="post_user"><h5>Norbu</h5></div>
+                <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium temporibus earum, facilis, ipsam necessitatibus dolorum quidem, totam officia maxime nemo labore ratione in sequi tempore eveniet sunt amet beatae doloribus?</div>
+                <div class="post_time " style="color:grey;">March 29,2020, 11:40 p.m</div>
+                <div class="like_wrapper">
+                    <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                    <span class="like_count font-weight-bold">10</span>
+                </div>
+                <div class="comment_wrapper">
+                    <div style="color:grey;">Comments</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}
