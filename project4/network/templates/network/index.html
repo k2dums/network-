@@ -14,11 +14,15 @@
         </div>
         {% endif %}
         {% for post in posts %}
-        <div class="post_wrapper ">
+        <div class="post_wrapper">
             <div class="post mb-5">
                 <div class="post_user"><h5>{{post.user}}</h5></div>
                 <div class="post_content">{{post.post}}</div>
-                <div class="post_time " style="color:grey;">{{post.time}}</div>
+                <div class="container row"> 
+                    <div class="post_time " style="color:grey;">{{post.time}}</div>
+                    <div class="edit col"><input type="button" value="Edit" class="btn-primary mt-1"></div>
+                </div>
+               
                 <div class="like_wrapper">
                     <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
                     <span class="like_count font-weight-bold">
