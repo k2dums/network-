@@ -3,12 +3,24 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from .models import Post,User
 
-from .models import User
 
 
 def index(request):
-    return render(request, "network/index.html")
+    if request.method=="POST":
+        new_post=request.POST.get("new_post")
+        if new_post:
+            #post_obj is used to refer a newly created object from Post class model
+            post_obj=Post()
+            user=request.user
+            user=User.objects.get(username=user)
+            post_obj.user=request.user
+            post_obj.post=new_post
+            post_obj.save()
+            print(f"[SAVED]{post_obj}")
+    print(Post.objects.all())
+    return render(request, "network/index.html",{"posts":Post.objects.all()})
 
 
 def login_view(request):
