@@ -19,7 +19,6 @@ def index(request):
             post_obj.post=new_post
             post_obj.save()
             print(f"[SAVED]{post_obj}")
-    print(Post.objects.all())
     return render(request, "network/index.html",{"posts":Post.objects.all()})
 
 
