@@ -1,0 +1,11 @@
+{% extends "network/layout.html" %}
+{% block body %}
+    <div>
+        <h1>Following</h1>
+        <div>
+            {% for x in followings %}
+                <div>{{x.follow}}</div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
