@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from .models import Post,User
-
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -73,5 +73,10 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-def profile(request):
-    return render(request,"network/profile.html")
+def profile(request,username):
+    return render(request,"network/profile.html",)
+
+@login_required
+def following(request,username):
+    print(request.user.following.all())
+    return render(request,"network/following.html",{"followings":request.user.following.all()})
