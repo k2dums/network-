@@ -1,15 +1,18 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+import datetime
 
 class User(AbstractUser):
     pass
 
 class Post(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
-    img_url=models.CharField(max_length=200,null=True)
-    description=models.CharField(max_length=200,null=True)
-    hasPhoto=models.BooleanField(default=False)
+    post=models.CharField(max_length=200,null=True)
+    time=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return(f"Post {self.id} by {self.user} at [{self.time}]")
+
 
 class Like(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
