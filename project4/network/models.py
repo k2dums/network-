@@ -31,7 +31,7 @@ class Comment(models.Model):
 
 class Follower(models.Model):
     follow=models.ForeignKey(User,on_delete=models.CASCADE,related_name="followers")
-    followers=models.ManyToManyField(User,blank=True,related_name='following')
+    by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following')
 
     def __str__(self):
-        return (f"{self.followers}is following {self.follow}")
+        return(f"{self.follow} by {self.by}")
