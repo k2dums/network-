@@ -1,17 +1,23 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div >
-        <div class="mb-5"><h1>All Posts</h1></div>
-        <div class="col mb-5">
-            <div class><h3>New posts</h3></div>
-            <div class><textarea rows="2" cols="200" style="width:40%;"></textarea></div>
-            <div><button class="btn-primary">Post</button></div>
+    <div class="wrapper_all_posts col">
+        <div class="mb-5 "><h1>All Posts</h1></div>
+        {% if user.is_authenticated %}
+        <div class=" mb-5 new_posts_wrapper">
+            <form method="POST" action="{% url 'index'%}">
+                {% csrf_token %}
+                <div class><h3>New posts</h3></div>
+                <div class><textarea rows="2" cols="200" style="width:40%;" name="new_post"></textarea></div>
+                <div><button class="btn-primary">Post</button></div>
+            </form>
         </div>
-        <div class="post_wrapper col">
+        {% endif %}
+        {% for post in posts %}
+        <div class="post_wrapper ">
             <div class="post mb-5">
-                <div class="post_user"><h5>Dummy_user</h5></div>
-                <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium temporibus earum, facilis, ipsam necessitatibus dolorum quidem, totam officia maxime nemo labore ratione in sequi tempore eveniet sunt amet beatae doloribus?</div>
+                <div class="post_user"><h5>{{post.user}}</h5></div>
+                <div class="post_content">{{post.post}}</div>
                 <div class="post_time " style="color:grey;">March 29,2020, 11:40 p.m</div>
                 <div class="like_wrapper">
                     <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
@@ -21,19 +27,8 @@
                     <div style="color:grey;">Comments</div>
                 </div>
             </div>
-            <div class="post mb-5">
-                <div class="post_user"><h5>Norbu</h5></div>
-                <div class="post_content">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium temporibus earum, facilis, ipsam necessitatibus dolorum quidem, totam officia maxime nemo labore ratione in sequi tempore eveniet sunt amet beatae doloribus?</div>
-                <div class="post_time " style="color:grey;">March 29,2020, 11:40 p.m</div>
-                <div class="like_wrapper">
-                    <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
-                    <span class="like_count font-weight-bold">10</span>
-                </div>
-                <div class="comment_wrapper">
-                    <div style="color:grey;">Comments</div>
-                </div>
-            </div>
         </div>
+        {% endfor %}
     </div>
     
 {% endblock %}
