@@ -1,10 +1,20 @@
 {% extends "network/layout.html" %}
 {% block body %}
-    <div class="header container mt-5" >
+<div>
+
+    <div class="header container mt-5 mb-5" >
         <div class="row mb-5 justify-content-center">
             <div class="dp mr-2" ><img src="" style="height:100px;width:100px;border: 1px solid black;border-radius:50%;"/></div>
             <div class="user font-weight-bold" style="margin-top: auto;margin-bottom: auto;">{{profile.username}}</div>
         </div>
+            
+        <div class="row justify-content-center">
+            <div class=""><input type="button" class="btn-dark mr-2" value="Follow"></div>
+            <div class=""><input type="button" class="btn-dark" value="Unfollow"></div>
+        </div>
+
+
+        
        
         <div class="row">
             <div class="col font-weight-bold text-center" >
@@ -17,4 +27,40 @@
             </div>
         </div>
     </div>
+
+    <div class="profile_post_wrapper col ">
+            <div class="profile_post_header mb-5">
+                {% if profile.username == user.username%}
+                <h3> My posts</h3>
+                {% else %}
+                <h3>{{profile.username}}'s posts</h3>
+                {% endif %}
+            </div>
+
+            {% for post in posts %}
+            <div class="post_wrapper" >
+                    <div class="post mb-5">
+                        <div class="post_user"><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
+                        <div class="post_content">{{post.post}}</div>
+                        <div class="container row"> 
+                            <div class="post_time " style="color:grey;">{{post.time}}</div>
+                            <div class="edit col"><input type="button" value="Edit" class="btn-primary mt-1"></div>
+                        </div>
+                       
+                        <div class="like_wrapper">
+                            <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                            <span class="like_count font-weight-bold">
+                                {{ post.likes.all.count }}                     
+                            </span>
+                        </div>
+                        <div class="comment_wrapper">
+                            <div style="color:grey;">Comments</div>
+                        </div>
+                    </div>
+            </div>
+            {% endfor%}
+            
+    </div>
+    
+</div> 
 {% endblock %}
