@@ -16,7 +16,7 @@
         {% for post in posts %}
         <div class="post_wrapper">
             <div class="post mb-5">
-                <div class="post_user"><h5>{{post.user}}</h5></div>
+                <div class="post_user"><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
                 <div class="post_content">{{post.post}}</div>
                 <div class="container row"> 
                     <div class="post_time " style="color:grey;">{{post.time}}</div>
