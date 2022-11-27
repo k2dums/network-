@@ -75,7 +75,8 @@ def register(request):
 
 def profile(request,username):
     user_obj=User.objects.get(username=username)
-    return render(request,"network/profile.html",{"profile":user_obj,})
+    post_obj=user_obj.posts.all()
+    return render(request,"network/profile.html",{"profile":user_obj,"posts":post_obj,})
 
 @login_required
 def following(request,username):
