@@ -1,16 +1,19 @@
 {% extends "network/layout.html" %}
+{% load static %}
 {% block body %}
 <div>
 
     <div class="header container mt-5 mb-5" >
         <div class="row mb-5 justify-content-center">
             <div class="dp mr-2" ><img src="" style="height:100px;width:100px;border: 1px solid black;border-radius:50%;"/></div>
-            <div class="user font-weight-bold" style="margin-top: auto;margin-bottom: auto;">{{profile.username}}</div>
+            <div class="user_profile font-weight-bold" style="margin-top: auto;margin-bottom: auto;">{{profile.username}}</div>
         </div>
             
         <div class="row justify-content-center">
-            <div class=""><input type="button" class="btn-dark mr-2" value="Follow"></div>
-            <div class=""><input type="button" class="btn-dark" value="Unfollow"></div>
+            {% if user != profile %}
+            <div class=""><button type="button" class="btn btn-dark mr-2 " id="follow_btn" >Follow</button></div>
+            <div class=""><button type="button" class="btn btn-dark " id="unfollow_btn" >UnFollow</button></div>
+            {% endif %}
         </div>
 
 
@@ -63,4 +66,8 @@
     </div>
     
 </div> 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/follow.js' %}"></script>
 {% endblock %}
