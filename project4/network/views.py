@@ -3,10 +3,11 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Post,User
+from django.http import JsonResponse
+from .models import Post,User,Follower
 from django.contrib.auth.decorators import login_required
-
-
+import json
+from django.views.decorators.csrf import csrf_exempt
 def index(request):
     if request.method=="POST":
         new_post=request.POST.get("new_post")
@@ -19,7 +20,7 @@ def index(request):
             post_obj.post=new_post
             post_obj.save()
             print(f"[SAVED]{post_obj}")
-    return render(request, "network/index.html",{"posts":Post.objects.all()})
+    return render(request, "network/index.html",{"posts":Post.objects.order_by("-time").all()})
 
 
 def login_view(request):
@@ -73,10 +74,39 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+@csrf_exempt
 def profile(request,username):
-    user_obj=User.objects.get(username=username)
-    post_obj=user_obj.posts.all()
-    return render(request,"network/profile.html",{"profile":user_obj,"posts":post_obj,})
+    try:
+        profile=User.objects.get(username=username)
+    except User.DoesNotExist:
+        return JsonResponse({"Error": "User Profile not found"},status=404)
+
+    if request.method=="PUT":
+        data=json.loads(request.body)
+        if data.get("follow") is not None:
+            try:
+                follower_obj=Follower.objects.get(follow=profile,by=request.user)
+                if data.get("follow")==False and follower_obj:
+                    follower_obj.delete()
+               
+            except Follower.DoesNotExist:
+                 if data.get("follow")==True:
+                    follower_obj=Follower(follow=profile,by=request.user)
+                    follower_obj.save()
+               
+           
+    posts=User.objects.get(username=username).posts.order_by("-time").all()
+    follow_status=False
+    try:
+        if (Follower.objects.get(follow=profile,by=request.user)):
+            follow_status=True
+    except Follower.DoesNotExist:
+        pass
+
+    return render(request,"network/profile.html",{"profile":profile,"posts":posts,"follow_status":follow_status})
+
+
+ 
 
 @login_required
 def following(request,username):
