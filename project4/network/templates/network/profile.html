@@ -10,9 +10,12 @@
         </div>
             
         <div class="row justify-content-center">
-            {% if user != profile %}
+            {% if user.username != profile.username %}
+            {% if not follow_status %}
             <div class=""><button type="button" class="btn btn-dark mr-2 " id="follow_btn" >Follow</button></div>
+            {% else %}
             <div class=""><button type="button" class="btn btn-dark " id="unfollow_btn" >UnFollow</button></div>
+            {% endif %} 
             {% endif %}
         </div>
 
