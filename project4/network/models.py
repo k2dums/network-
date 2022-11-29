@@ -3,7 +3,12 @@ from django.db import models
 import datetime
 
 class User(AbstractUser):
-    pass
+    
+    def serialize(self):
+        return {
+         "username":self.username,
+         "email":self.email,  
+        }
 
 class Post(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
@@ -11,7 +16,7 @@ class Post(models.Model):
     time=models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return(f"Post {self.id} by {self.user} ")
+        return(f"[{self.id}]: Post created by {self.user} ")
 
 
 class Like(models.Model):
@@ -19,7 +24,7 @@ class Like(models.Model):
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name="likes")
 
     def __str__(self):
-        return(f'[{self.post}]liked by {self.user}')
+        return(f'[{self.id}]:[{self.post}]liked by {self.user}')
 
 class Comment(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -27,11 +32,11 @@ class Comment(models.Model):
     comment=models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return (f"[{self.post}] comment by {self.user}")
+        return (f"[{self.id}]:[{self.post}] comment by {self.user}")
 
 class Follower(models.Model):
     follow=models.ForeignKey(User,on_delete=models.CASCADE,related_name="followers")
     by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following')
 
     def __str__(self):
-        return(f"{self.follow} by {self.by}")
+        return(f"[{self.id}]:{self.follow} by {self.by}")
