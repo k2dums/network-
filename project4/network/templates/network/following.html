@@ -1,10 +1,38 @@
 {% extends "network/layout.html" %}
+{% load static %}
 {% block body %}
-    <div>
+    <div class="col">
         <h1>Following</h1>
         <div>
-            {% for x in followings %}
-                <div>{{x.follow}}</div>
+            {% for post in posts %}
+            <div class="post_wrapper">
+                <div class="post mb-5">
+                    <div class="post_user"><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
+                    <div class="post_content">{{post.post}}</div>
+                    <div class="container row"> 
+                        <div class="post_time " style="color:grey;">{{post.time}}</div>
+                        <div class="edit col"><input type="button" value="Edit" class="btn-primary mt-1"></div>
+                    </div>
+                   
+                    <div class="like_wrapper">
+                        <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                        <span class="like_count font-weight-bold">
+                            {{ post.likes.all.count }}                     
+                        </span>
+                    </div>
+                    <div class="comment_wrapper">
+                        <div style="color:grey;">Comments</div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="row justify-content-center">
+                <div class="alert alert-secondary" role="alert">
+                    <h3 style="color:grey;">You follow no User</h3>
+                  </div>
+               
+            </div>
+
             {% endfor %}
         </div>
     </div>
