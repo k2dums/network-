@@ -15,8 +15,14 @@ class Post(models.Model):
     post=models.CharField(max_length=200,null=True)
     time=models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        return {
+            'user':self.user.username,
+            'post':self.post,
+            'time':self.time,
+        }
     def __str__(self):
-        return(f"[{self.id}]: Post created by {self.user} ")
+        return(f" Post [{self.id}] created by {self.user} ")
 
 
 class Like(models.Model):
@@ -24,7 +30,7 @@ class Like(models.Model):
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name="likes")
 
     def __str__(self):
-        return(f'[{self.id}]:[{self.post}]liked by {self.user}')
+        return(f'Like_id:[{self.id}]---[{self.post}]liked by {self.user}')
 
 class Comment(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -32,11 +38,11 @@ class Comment(models.Model):
     comment=models.CharField(max_length=200,null=True)
 
     def __str__(self):
-        return (f"[{self.id}]:[{self.post}] comment by {self.user}")
+        return (f"Comment_id:[{self.id}]---[{self.post}] comment by {self.user}")
 
 class Follower(models.Model):
     follow=models.ForeignKey(User,on_delete=models.CASCADE,related_name="followers")
     by=models.ForeignKey(User,on_delete=models.CASCADE,related_name='following')
 
     def __str__(self):
-        return(f"[{self.id}]:{self.follow} by {self.by}")
+        return(f"Follower_id:[{self.id}]---{self.follow} by {self.by}")
