@@ -1,14 +1,14 @@
-document.addEventListener('DOMContentLoaded',function(){
-    if (document.querySelector("#follow_btn"))
-    {document.querySelector("#follow_btn").addEventListener('click',()=>follow_action("follow"));
-    }
+// document.addEventListener('DOMContentLoaded',function(){
+//     if (document.querySelector("#follow_btn"))
+//     {document.querySelector("#follow_btn").addEventListener('click',()=>follow_action("follow"));
+//     }
 
-    if (document.querySelector("#unfollow_btn"))
-    {document.querySelector("#unfollow_btn").addEventListener('click',()=>follow_action("unfollow"));
-    }
+//     if (document.querySelector("#unfollow_btn"))
+//     {document.querySelector("#unfollow_btn").addEventListener('click',()=>follow_action("unfollow"));
+//     }
    
 
-});
+// });
 
 function follow_action(action){
     let follow=window.location.href;
@@ -33,4 +33,19 @@ function follow_action(action){
             follow:action
         })
     }).then(()=>window.location.reload());
+}
+
+
+function like_action(post){
+fetch(`/post/${post}`,{
+    method:'PUT',
+}).then(response=>console.log(response));
+}
+
+function change_like_icon(){
+    document.querySelectorAll(".like_button").forEach(button=>{
+        button.ondblclick=function(){
+         this.classList.toggle('fa-solid');
+        }
+    });
 }
