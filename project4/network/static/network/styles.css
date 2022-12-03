@@ -1,3 +1,7 @@
+.new_post{
+    width:40%; 
+    min-width: 500px;
+}
 .post_content{
     background-color: rgba(219, 214, 214, 0.4);
 }
