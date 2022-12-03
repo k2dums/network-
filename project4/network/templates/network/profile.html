@@ -12,9 +12,9 @@
         <div class="row justify-content-center">
             {% if user.username != profile.username %}
             {% if not follow_status %}
-            <div class=""><button type="button" class="btn btn-dark mr-2 " id="follow_btn" >Follow</button></div>
+            <div class=""><button type="button" class="btn btn-dark mr-2 " id="follow_btn" onclick="follow_action('follow')" >Follow</button></div>
             {% else %}
-            <div class=""><button type="button" class="btn btn-dark " id="unfollow_btn" >UnFollow</button></div>
+            <div class=""><button type="button" class="btn btn-dark " id="unfollow_btn" onclick="follow_action('unfollow')">UnFollow</button></div>
             {% endif %} 
             {% endif %}
         </div>
@@ -54,7 +54,7 @@
                         </div>
                        
                         <div class="like_wrapper">
-                            <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                            <span class="like"><img class="like_button" ondblclick="like_action()" src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
                             <span class="like_count font-weight-bold">
                                 {{ post.likes.all.count }}                     
                             </span>
@@ -73,4 +73,5 @@
 
 {% block script %}
     <script src="{% static 'network/follow.js' %}"></script>
+    <script src="https://kit.fontawesome.com/94e51ae003.js" crossorigin="anonymous"></script>
 {% endblock %}
