@@ -1,5 +1,5 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 {% block body %}
     <div class="wrapper_all_posts col">
         <div class="mb-5 "><h1>All Posts</h1></div>
@@ -8,11 +8,12 @@
             <form method="POST" action="{% url 'index'%}">
                 {% csrf_token %}
                 <div class><h3>New posts</h3></div>
-                <div class><textarea rows="2" cols="200" style="width:40%;" name="new_post"></textarea></div>
+                <div class class="new_post_wrapper"><textarea rows="2" cols="200" name="new_post" class="new_post"></textarea></div>
                 <div><button class="btn-primary">Post</button></div>
             </form>
         </div>
         {% endif %}
+
         {% for post in posts %}
         <div class="post_wrapper">
             <div class="post mb-5">
@@ -24,7 +25,7 @@
                 </div>
                
                 <div class="like_wrapper">
-                    <span class="like"><img src="https://img.icons8.com/ios/100/null/like--v1.png" style="height: 30px;"/></span>
+                    <span class="like"><i class="fa-regular fa-heart fa-2xl like_button" ondblclick="like_action('{{post.id}}')"></i></span>
                     <span class="like_count font-weight-bold">
                         {{ post.likes.all.count }}                     
                     </span>
@@ -34,7 +35,13 @@
                 </div>
             </div>
         </div>
+        {% empty %}
+        <h3>No Post</h3>
         {% endfor %}
     </div>
     
+{% endblock %}
+{% block script %}
+    <script src="{% static 'network/follow.js' %}"></script>
+    <script src="https://kit.fontawesome.com/ebcbbd71ee.js" crossorigin="anonymous"></script>
 {% endblock %}
