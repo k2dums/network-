@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
-from .models import Post,User,Follower
+from .models import Post,User,Follower,Like
 from django.contrib.auth.decorators import login_required
 import json
 from django.views.decorators.csrf import csrf_exempt
@@ -110,5 +110,30 @@ def profile(request,username):
 
 @login_required
 def following(request,username):
-    print(request.user.following.all())
-    return render(request,"network/following.html",{"followings":request.user.following.all()})
+    following__=request.user.following.all()
+    print(following__)
+    following__=[following.follow for following in following__]
+    posts=Post.objects.order_by("-time").filter(user__in=following__)
+    return render(request,"network/following.html",{
+        "followings":following__,
+        "posts":posts,
+        })
+@csrf_exempt
+def post(request,post):
+    try:
+        post__=Post.objects.get(id=post)
+    except Post.DoesNotExist:
+        return JsonResponse({"Error":"Post does not exist"},status=404)
+    if request.method == "GET":
+        return JsonResponse(post__.serialize())
+    if request.method=='PUT':
+        try:
+            like_obj=Like.objects.get(post=post)
+            if  like_obj:
+                like_obj.delete()
+                return HttpResponse({"like":"true"}, content_type="application/json")
+        except Like.DoesNotExist:
+            like_obj=Like(user=request.user,post=post__)
+            like_obj.save()
+            return HttpResponse({"like":'true'}, content_type="application/json")
+
