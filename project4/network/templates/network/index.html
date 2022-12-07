@@ -15,24 +15,37 @@
         {% endif %}
 
         {% for post in posts %}
-        <div class="post_wrapper">
-            <div class="post mb-5">
-                <div class="post_user"><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
+        <div class="post_wrapper mb-5">
+            <div class="post " >
+                <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
                 <div class="post_content">{{post.post}}</div>
-                <div class="container row"> 
-                    <div class="post_time " style="color:grey;">{{post.time}}</div>
-                    <div class="edit col"><input type="button" value="Edit" class="btn-primary mt-1"></div>
+                <div class="post_time_edit container" > 
+                    <div class="row justify-content-between edit_button_wrapper">  
+                        <div class="post_time" >{{post.time}}</div>
+                        {% if post.user == user %}
+                        <input type="button"  value="Edit" onclick="edit_action(event,'{{post.id}}')" class="btn btn-primary mt-1 post_edit"/>
+                        {% endif %}</div>
+                     
                 </div>
                
                 <div class="like_wrapper">
-                    <span class="like"><i class="fa-regular fa-heart fa-2xl like_button" ondblclick="like_action('{{post.id}}')"></i></span>
+                        {% for liked in user.likes.all %}
+                            {% if liked.post == post %}
+                            <span class="like"><i class="fa fa-solid fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+                            {% else %}
+                            <span class="like"><i class="fa fa-regular fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+                            {% endif %}
+                            {% empty %}
+                            <span class="like"><i class="fa fa-regular fa-heart fa-2x like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+                        {%  endfor %}
+                  
                     <span class="like_count font-weight-bold">
-                        {{ post.likes.all.count }}                     
+                        {{ post.likes.all.count}}                     
                     </span>
                 </div>
-                <div class="comment_wrapper">
+                <!-- <div class="comment_wrapper">
                     <div style="color:grey;">Comments</div>
-                </div>
+                </div> -->
             </div>
         </div>
         {% empty %}
