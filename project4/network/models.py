@@ -26,8 +26,12 @@ class Post(models.Model):
 
 
 class Like(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='likes')
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name="likes")
+
+    class Meta:
+        constraints=[ models.UniqueConstraint(fields=['user','post'],name='unique user likes')]
+
 
     def __str__(self):
         return(f'Like_id:[{self.id}]---[{self.post}]liked by {self.user}')
