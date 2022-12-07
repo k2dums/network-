@@ -20,6 +20,7 @@ def index(request):
             post_obj.post=new_post
             post_obj.save()
             print(f"[SAVED]{post_obj}")
+
     return render(request, "network/index.html",{"posts":Post.objects.order_by("-time").all()})
 
 
@@ -76,11 +77,12 @@ def register(request):
 
 @csrf_exempt
 def profile(request,username):
+    if not(request.user.is_authenticated):
+        return render (request,'network/login.html',{'message':'Need to be logged in to view the profile'})
     try:
         profile=User.objects.get(username=username)
     except User.DoesNotExist:
-        return JsonResponse({"Error": "User Profile not found"},status=404)
-
+        return JsonResponse({"Error": "User Profile not found"},status=404) 
     if request.method=="PUT":
         data=json.loads(request.body)
         if data.get("follow") is not None:
@@ -119,21 +121,26 @@ def following(request,username):
         "posts":posts,
         })
 @csrf_exempt
-def post(request,post):
+@login_required
+def post(request,post_id):
     try:
-        post__=Post.objects.get(id=post)
+        post__=Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         return JsonResponse({"Error":"Post does not exist"},status=404)
     if request.method == "GET":
         return JsonResponse(post__.serialize())
     if request.method=='PUT':
         try:
-            like_obj=Like.objects.get(post=post)
+            like_obj=Like.objects.filter(post=post__,user=request.user)
             if  like_obj:
+                print(f"[Delete] the {like_obj} is being deleted")
                 like_obj.delete()
-                return HttpResponse({"like":"true"}, content_type="application/json")
+                return JsonResponse({"status":False,"likes":len(post__.likes.all())},status=200)
+            else:
+                like_obj=Like(user=request.user,post=post__)
+                like_obj.save()
+                print(f"[Created] the {like_obj} has been deleted")
+                return JsonResponse({"status":True,"likes":len(post__.likes.all())},status=201)
         except Like.DoesNotExist:
-            like_obj=Like(user=request.user,post=post__)
-            like_obj.save()
-            return HttpResponse({"like":'true'}, content_type="application/json")
-
+            return JsonResponse({"status":False},status=201)
+    
