@@ -1,13 +1,21 @@
-.new_post{
-    width:40%; 
-    min-width: 500px;
+.new_post,.post
+{
+    width:30%; 
+    min-width: 400px;
 }
+
+.edit_text_area{
+    width: 100%; 
+    vertical-align:top;
+    border-radius: 10px ;
+    padding: 10px;
+    background-color: rgba(219, 214, 214, 0.4);
+}
+
 .post_content{
     background-color: rgba(219, 214, 214, 0.4);
 }
 .post{
-    width: 40%;
-    min-width:500px;
     border:1px solid grey;
     border-radius: 10px ;
     padding: 10px;
@@ -15,4 +23,8 @@
 .post_wrapper{
     width: 100%;
     min-width:500px;
+}
+
+.post_time{
+   color:grey;
 }
