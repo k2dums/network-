@@ -14,6 +14,7 @@ class Post(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="posts")
     post=models.CharField(max_length=200,null=True)
     time=models.DateTimeField(auto_now_add=True)
+    like=models.ManyToManyField(User,related_name='user_liked',blank=True)
 
     def serialize(self):
         return {
@@ -22,12 +23,15 @@ class Post(models.Model):
             'time':self.time,
         }
     def __str__(self):
-        return(f" Post [{self.id}] created by {self.user} ")
+        return(f" Post [{self.id}]")
+    def total_likes(self):
+        return self.like.count()
 
 
 class Like(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='likes')
     post=models.ForeignKey(Post,on_delete=models.CASCADE,related_name="likes")
+    flag=models.BooleanField(default=False)
 
     class Meta:
         constraints=[ models.UniqueConstraint(fields=['user','post'],name='unique user likes')]
