@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded',function(){
 function edit_action(e,post)
 {   console.log('edit has been clicked')
     const button =e.target;
+    console.log(button)
     const parent=button.parentElement;
+    console.log(parent)
     fetch(`/post/${post}`)
     .then(res=>res.json())
     .then(result=>{
@@ -37,7 +39,8 @@ function edit_action(e,post)
                 console.log(child.style.color);
                 child.style.backgroundColor= 'transparent';
                 child.append(edit_button_wrapper);
-                cancel.addEventListener('click',()=>cancel_action(text,child,button,post_node))
+                cancel.addEventListener('click',()=>cancel_action(text,child,button,post_node));
+                save.addEventListener('click',()=>save_action(post,child,edit_text_area));
                 button.remove();
                 break;
                
@@ -78,9 +81,9 @@ function like_action(e,post){
     })
         .then(res=>res.json())
         .then(result=>{
+            console.log(result)
             button.classList.toggle('fa-solid')
-            childrens= button.parentElement.parentElement.children
-            childrens[1].innerHTML=result.likes
+            button.parentElement.nextElementSibling.innerHTML=result.likes
             }
         );
 }
@@ -97,7 +100,21 @@ function cancel_action(text,post_content_node,edit_button,post_node)
     node.append(edit_button);
 }
 
-function save_action()
+function save_action(post_id,post_content,text_area)
 {
+    //post_content is an html element 
 
+    fetch(`/post/${post_id}`,{
+        method:'POST',
+        body:JSON.stringify(
+            content=text_area.value
+        )
+    }).then(response=>response.json)
+    .then(result=>{
+        console.log(result);
+        post_content=""
+        post_content.text_area.value
+    })
+    
 }
+
