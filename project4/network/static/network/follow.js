@@ -36,10 +36,9 @@ function edit_action(e,post)
 
                 child.innerHTML="";
                 child.append(edit_text_area);
-                child.style.backgroundColor= 'transparent';
                 child.append(edit_button_wrapper);
                 cancel.addEventListener('click',()=>cancel_action(text,child,button,post_node));
-                save.addEventListener('click',()=>save_action(post,child,edit_text_area));
+                save.addEventListener('click',()=>save_action(post,child,edit_text_area,button));
                 button.remove();
                 break;
                
@@ -104,20 +103,47 @@ function cancel_action(text,post_content_node,edit_button,post_node)
     node.append(edit_button);
 }
 
-function save_action(post_id,post_content,text_area)
+function save_action(post_id,post_content,text_area,edit_button)
 {
     //post_content is an html element 
     console.log('save button has been clicked')
     fetch(`/post/${post_id}`,{
         method:'POST',
-        body:JSON.stringify(
-            content=text_area.value
+        body:JSON.stringify({
+            content:text_area.value
+        }
+           
         )
-    }).then(response=>response.json)
+    }).then(response=>response.json())
     .then(result=>{
         console.log(result);
-        post_content=""
-        post_content.text_area.value
+        if (result.message=='Empty Content')
+        {
+            post_content.innerHTML="";
+            post_content.innerHTML=result.content.replaceAll('\n','<br>');
+            const node=post_node.querySelector(".edit_button_wrapper");
+            node.append(edit_button);
+
+            const error_message=document.createElement('div');
+            error_message.classList.add('error_message','alert','alert-danger')
+
+        }
+        else{
+            if (result.change)
+            {
+                post_content.innerHTML="";
+                post_content.innerHTML=result.content.replaceAll('\n','<br>');
+                const node=post_node.querySelector(".edit_button_wrapper");
+                node.append(edit_button);
+            }
+            else{
+                post_content.innerHTML="";
+                post_content.innerHTML=text_area.value.replaceAll('\n','<br>');
+                const node=post_node.querySelector(".edit_button_wrapper");
+                node.append(edit_button);
+             }
+        }
+
     })
     
 }
