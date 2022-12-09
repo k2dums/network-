@@ -4,13 +4,13 @@ document.addEventListener('DOMContentLoaded',function(){
 function edit_action(e,post)
 {   console.log('edit has been clicked')
     const button =e.target;
-    console.log(button)
+    // console.log(button)
     const parent=button.parentElement;
-    console.log(parent)
+    // console.log(parent)
     fetch(`/post/${post}`)
     .then(res=>res.json())
     .then(result=>{
-        console.log(result);
+        // console.log(result);
         const text=result.post;
         // the text_area 
         const  edit_text_area=document.createElement('textarea');
@@ -36,7 +36,6 @@ function edit_action(e,post)
 
                 child.innerHTML="";
                 child.append(edit_text_area);
-                console.log(child.style.color);
                 child.style.backgroundColor= 'transparent';
                 child.append(edit_button_wrapper);
                 cancel.addEventListener('click',()=>cancel_action(text,child,button,post_node));
@@ -49,6 +48,7 @@ function edit_action(e,post)
     })
 }
 function follow_action(action){
+    console.log('follow button has been clicked')
     let follow=window.location.href;
     const by=document.querySelector(".user_logged_in").innerHTML;
     const re=new RegExp('.*\/(.*)');
@@ -75,6 +75,7 @@ function follow_action(action){
 
 
 function like_action(e,post){
+    console.log('like button has been clicked')
     const button=e.target;
     fetch(`/post/${post}`,{
         method:'PUT'
@@ -83,27 +84,30 @@ function like_action(e,post){
         .then(result=>{
             console.log(result)
             button.classList.toggle('fa-solid')
-            button.parentElement.nextElementSibling.innerHTML=result.likes
+            button.classList.toggle('fa-regular')
+            return result.likes
             }
-        );
+        )
+        .then(likes=> button.parentElement.nextElementSibling.innerHTML=likes);
 }
 
 function cancel_action(text,post_content_node,edit_button,post_node)
 {   
+    console.log('cancel has been clicked')
     post_content_node.innerHTML=" ";
     text=text.replaceAll('\n','<br>')
     post_content_node.innerHTML=text;
     post_content_node.style.backgroundColor='rgba(219, 214, 214, 0.4)';
     const node=post_node.querySelector(".edit_button_wrapper");
-    console.log(edit_button);
-    console.log(node);
+    // console.log(edit_button);
+    // console.log(node);
     node.append(edit_button);
 }
 
 function save_action(post_id,post_content,text_area)
 {
     //post_content is an html element 
-
+    console.log('save button has been clicked')
     fetch(`/post/${post_id}`,{
         method:'POST',
         body:JSON.stringify(
