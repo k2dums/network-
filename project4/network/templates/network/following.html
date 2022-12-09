@@ -7,37 +7,37 @@
             {% if user.following.count > 0 %}
             
             {% for post in posts %}
-            <div class="post_wrapper mb-5">
-                <div class="post " >
-                    <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.id}}--{{post.user}}</h5></a></div>
-                    <div class="post_content">{{ post.post|linebreaks}}</div>
-                    <div class="post_time_edit container" > 
-                        <div class="row justify-content-between edit_button_wrapper">  
-                            <div class="post_time" >{{post.time}}</div>
-                            {% if post.user == user %}
-                            <input type="button"  value="Edit" onclick="edit_action(event,'{{post.id}}')" class="btn btn-primary mt-1 post_edit"/>
-                            {% endif %}</div>
-                         
-                    </div>
-                   
-                    <div class="like_wrapper">
-                        {% if user in post__.like.all %}
-                        <span class="like"><i class="fa fa-solid fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i>
-                        {% else %}
-                        <span class="like"><i class="fa fa-regular fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i>
-                        {% endif %}
-                        <span class="like_count font-weight-bold">
-                        {{ post.likes.all.count}}                     
-                        </span>
-                    </div>
-                    <!-- <div class="comment_wrapper">
-                        <div style="color:grey;">Comments</div>
-                    </div> -->
+        <div class="post_wrapper mb-5">
+            <div class="post " >
+                <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.id}}--{{post.user}}</h5></a></div>
+                <div class="post_content">{{ post.post|linebreaks}}</div>
+                <div class="post_time_edit container" > 
+                    <div class="row justify-content-between edit_button_wrapper">  
+                        <div class="post_time" >{{post.time}}</div>
+                        {% if post.user == user %}
+                        <input type="button"  value="Edit" onclick="edit_action(event,'{{post.id}}')" class="btn btn-primary mt-1 post_edit"/>
+                        {% endif %}</div>
+                     
                 </div>
+               
+                <div class="like_wrapper">
+                    {% if user in post.like.all %}
+                    <span class="like"><i class="fa fa-solid fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+                    {% else %}
+                    <span class="like"><i class="fa fa-regular fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+                    {% endif %}
+                    <span class="like_count font-weight-bold">
+                    {{ post.total_likes}}                     
+                    </span>
+                </div>
+                <!-- <div class="comment_wrapper">
+                    <div style="color:grey;">Comments</div>
+                </div> -->
             </div>
-            {% empty %}
-                <h3>No Post</h3>
-            {% endfor %}
+        </div>
+        {% empty %}
+        <h3>No Post</h3>
+        {% endfor %}
             {% else %}
             <div class="row justify-content-center">
                 <div class="alert alert-secondary" role="alert">
