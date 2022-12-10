@@ -78,8 +78,8 @@ def register(request):
 
 @csrf_exempt
 def profile(request,username):
-    if not(request.user.is_authenticated):
-        return render (request,'network/login.html',{'message':'Need to be logged in to view the profile'})
+    # if not(request.user.is_authenticated):
+    #     return render (request,'network/login.html',{'message':'Need to be logged in to view the profile'})
     try:
         profile=User.objects.get(username=username)
     except User.DoesNotExist:
@@ -99,11 +99,12 @@ def profile(request,username):
                     follower_obj.save()
     posts=User.objects.get(username=username).posts.order_by("-time").all()
     follow_status=False
-    try:
-        if (Follower.objects.get(follow=profile,by=request.user)):
-            follow_status=True
-    except Follower.DoesNotExist:
-        pass
+    if (request.user.is_authenticated):
+        try:
+            if (Follower.objects.get(follow=profile,by=request.user)):
+                follow_status=True
+        except Follower.DoesNotExist:
+            pass
 
 
     return render(request,"network/profile.html",{"profile":profile,"posts":posts,"follow_status":follow_status})
@@ -173,12 +174,17 @@ def post(request,post_id):
 
     #Putting the data
     if request.method=='POST':
+        print('POST request received')
         data=json.loads(request.body)
         if (data.get('content')):
-            post__.post=data.get('content')
+            data=data.get('content')
+            if data==post__.post:
+                return JsonResponse({"change":False,"message": "No changes made"}, status=200)
+            post__.post=data
             post__.save()
             print(f"[SAVED] post has been updated {post__}")
-            return JsonResponse({"message": "Saved the content Successfully"}, status=201)
+            return JsonResponse({"change":True,"message": "Saved the content Successfully","content":post__.post}, status=201)
+        #There is no content
         else:
-                 return JsonResponse({"message": "Failed to save content "}, status=409)
+                 return JsonResponse({"message": "Was sent empty content"}, status=409)
     
