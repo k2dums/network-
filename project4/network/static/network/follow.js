@@ -16,6 +16,8 @@ function edit_action(e,post)
         const  edit_text_area=document.createElement('textarea');
         edit_text_area.classList.add('edit_text_area')
         edit_text_area.value=text;
+        //Getting the current text in the text area
+        const current_text=edit_text_area.value
         //Save button
         const save=document.createElement('button');
         save.innerHTML='Save Edit';
@@ -38,7 +40,7 @@ function edit_action(e,post)
                 child.append(edit_text_area);
                 child.append(edit_button_wrapper);
                 cancel.addEventListener('click',()=>cancel_action(text,child,button,post_node));
-                save.addEventListener('click',()=>save_action(post,child,edit_text_area,button));
+                save.addEventListener('click',()=>save_action(post,child,current_text,button,edit_text_area));
                 button.remove();
                 break;
                
@@ -103,30 +105,30 @@ function cancel_action(text,post_content_node,edit_button,post_node)
     node.append(edit_button);
 }
 
-function save_action(post_id,post_content,text_area,edit_button)
+function save_action(post_id,post_content,text,edit_button,edit_text_area)
 {
     //post_content is an html element 
     console.log('save button has been clicked')
     fetch(`/post/${post_id}`,{
         method:'POST',
         body:JSON.stringify({
-            content:text_area.value
-        }
-           
-        )
+            content:edit_text_area.value
+        } )
     }).then(response=>response.json())
     .then(result=>{
         console.log(result);
-        if (result.message=='Empty Content')
-        {
+        if (result.message=='Was sent empty content')
+        {   
             post_content.innerHTML="";
-            post_content.innerHTML=result.content.replaceAll('\n','<br>');
+            post_content.innerHTML=text.replaceAll('\n','<br>')
             const node=post_node.querySelector(".edit_button_wrapper");
             node.append(edit_button);
 
-            const error_message=document.createElement('div');
-            error_message.classList.add('error_message','alert','alert-danger')
-
+            // const error_message=document.createElement('div');
+            // error_message.classList.add('error_message','alert','alert-danger')
+            // error_message.innerHTML=result.message
+            // console.log(error_message)
+            post_content.insertAdjacentHTML('afterend',`<div class="error_message alert alert-danger mt-2">${result.message}</div>`)
         }
         else{
             if (result.change)
@@ -135,12 +137,17 @@ function save_action(post_id,post_content,text_area,edit_button)
                 post_content.innerHTML=result.content.replaceAll('\n','<br>');
                 const node=post_node.querySelector(".edit_button_wrapper");
                 node.append(edit_button);
+                
             }
             else{
-                post_content.innerHTML="";
-                post_content.innerHTML=text_area.value.replaceAll('\n','<br>');
-                const node=post_node.querySelector(".edit_button_wrapper");
-                node.append(edit_button);
+                if (result.message=='No changes made')
+                {
+                    post_content.innerHTML="";
+                    post_content.innerHTML=text.replaceAll('\n','<br>');
+                    const node=post_node.querySelector(".edit_button_wrapper");
+                    node.append(edit_button);
+                }
+        
              }
         }
 
