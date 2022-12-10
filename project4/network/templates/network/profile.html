@@ -10,7 +10,7 @@
         </div>
             
         <div class="row justify-content-center">
-            {% if user.username != profile.username %}
+            {% if user.is_authenticated  and user.username != profile.username  %}
             {% if not follow_status %}
             <div class=""><button type="button" class="btn btn-dark mr-2 " id="follow_btn" onclick="follow_action('follow')" >Follow</button></div>
             {% else %}
@@ -46,7 +46,7 @@
             {% for post in posts %}
             <div class="post_wrapper mb-5">
                 <div class="post " >
-                    <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.id}}--{{post.user}}</h5></a></div>
+                    <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
                     <div class="post_content">{{ post.post|linebreaks}}</div>
                     <div class="post_time_edit container" > 
                         <div class="row justify-content-between edit_button_wrapper">  
