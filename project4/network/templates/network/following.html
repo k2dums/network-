@@ -4,9 +4,8 @@
     <div class="col">
         <h1>Following</h1>
         <div>
-            {% if user.following.count > 0 %}
-            
-            {% for post in posts %}
+        {% if user.following.count > 0 %}
+        {% for post in page %}
         <div class="post_wrapper mb-5">
             <div class="post " >
                 <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
@@ -20,14 +19,14 @@
                      
                 </div>
                
-                <div class="like_wrapper">
-                    {% if user in post.like.all %}
-                    <span class="like"><i class="fa fa-solid fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
-                    {% else %}
-                    <span class="like"><i class="fa fa-regular fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
-                    {% endif %}
-                    <span class="like_count font-weight-bold">
-                    {{ post.total_likes}}                     
+        <div class="like_wrapper">
+            {% if user in post.like.all %}
+                <span class="like"><i class="fa fa-solid fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+            {% else %}
+                <span class="like"><i class="fa fa-regular fa-heart fa-2xl like_button" onclick="like_action(event,'{{post.id}}')"></i></span>
+            {% endif %}
+            <span class="like_count font-weight-bold">
+            {{ post.total_likes}}                     
                     </span>
                 </div>
                 <!-- <div class="comment_wrapper">
@@ -38,13 +37,39 @@
         {% empty %}
         <h3>No Post</h3>
         {% endfor %}
-            {% else %}
-            <div class="row justify-content-center">
-                <div class="alert alert-secondary" role="alert">
-                    <h3 style="color:grey;">You follow no users</h3>
-                  </div>
+        {% else %}
+        <div class="row justify-content-center">
+            <div class="alert alert-secondary" role="alert">
+            <h3 style="color:grey;">You follow no users</h3>
             </div>
-            {% endif %}
+            </div>
+        {% endif %}
+        </div>
+        <div class="pagination_wrapper container">
+            <nav aria-label="..." class="row justify-content-center">
+                <ul class="pagination">
+                {% if page %}
+                {% if  page.has_previous %}
+                  <li class="page-item ">
+                    <a class="page-link" href="{% url 'index' %}?page={{ page.previous_page_number }}">Previous</a>
+                  </li>
+                  <li class="page-item ">
+                    <a class="page-link" href="{% url 'index' %}?page={{ page.previous_page_number }}">{{page.previous_page_number}}</a>
+                  </li>
+                  {% endif %}
+                  <li class="page-item active" aria-current="page">
+                    <a class="page-link" href="#">{{ page.number }}</a>
+                  </li>
+        
+                  {% if page.has_next %}
+                  <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ page.next_page_number }}">{{page.next_page_number}}</a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="{% url 'index' %}?page={{ page.next_page_number }}">Next</a>
+                  </li>
+                  {% endif %}
+                  {% endif %}
+                </ul>
+              </nav>
         </div>
     </div>
 {% endblock %}
