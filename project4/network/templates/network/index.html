@@ -14,10 +14,10 @@
             </form>
         </div>
         {% endif %}
-        {% for post in posts %}
+        {% for post in page %}
         <div class="post_wrapper mb-5">
             <div class="post " >
-                <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.id}}--{{post.user}}</h5></a></div>
+                <div class="post_user" ><a href="{% url 'profile' post.user %}"><h5>{{post.user}}</h5></a></div>
                 <div class="post_content">{{ post.post|linebreaks}}</div>
                 <div class="post_time_edit container" > 
                     <div class="row justify-content-between edit_button_wrapper">  
@@ -47,6 +47,34 @@
         <h3>No Post</h3>
         {% endfor %}
     </div>
+
+<div class="pagination_wrapper container">
+    <nav aria-label="..." class="row justify-content-center">
+        <ul class="pagination">
+        {% if page %}
+        {% if  page.has_previous %}
+          <li class="page-item ">
+            <a class="page-link" href="{% url 'index' %}?page={{ page.previous_page_number }}">Previous</a>
+          </li>
+          <li class="page-item ">
+            <a class="page-link" href="{% url 'index' %}?page={{ page.previous_page_number }}">{{page.previous_page_number}}</a>
+          </li>
+          {% endif %}
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">{{ page.number }}</a>
+          </li>
+
+          {% if page.has_next %}
+          <li class="page-item"><a class="page-link" href="{% url 'index' %}?page={{ page.next_page_number }}">{{page.next_page_number}}</a></li>
+          <li class="page-item">
+            <a class="page-link" href="{% url 'index' %}?page={{ page.next_page_number }}">Next</a>
+          </li>
+          {% endif %}
+          {% endif %}
+        </ul>
+      </nav>
+</div>
+    
     
 {% endblock %}
 {% block script %}
