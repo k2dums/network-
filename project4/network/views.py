@@ -8,6 +8,7 @@ from .models import Post,User,Follower,Like
 from django.contrib.auth.decorators import login_required
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import Paginator
 def index(request):
     if request.method=="POST":
         new_post=request.POST.get("new_post")
@@ -21,8 +22,13 @@ def index(request):
             post_obj.save()
             print(f"[SAVED]{post_obj}")
             return HttpResponseRedirect(reverse('index'))
-
-    return render(request, "network/index.html",{"posts":Post.objects.order_by("-time").all()})
+    objects=Post.objects.order_by("-time").all()
+    p=Paginator(objects,10)
+    if request.method=='GET':
+        number=request.GET.get('page',default=1)
+        page=p.page(number)
+        print(page)
+    return render(request, "network/index.html",{"page":page})
 
 
 def login_view(request):
@@ -106,8 +112,12 @@ def profile(request,username):
         except Follower.DoesNotExist:
             pass
 
-
-    return render(request,"network/profile.html",{"profile":profile,"posts":posts,"follow_status":follow_status})
+    p=Paginator(posts,10)
+    if request.method=='GET':
+        number=request.GET.get('page',default=1)
+        page=p.page(number)
+        print(page)
+    return render(request,"network/profile.html",{"profile":profile,"page":page,"follow_status":follow_status})
 
 
  
@@ -118,9 +128,14 @@ def following(request,username):
     print(following__)
     following__=[following.follow for following in following__]
     posts=Post.objects.order_by("-time").filter(user__in=following__)
+    p=Paginator(posts,10)
+    if request.method=='GET':
+        number=request.GET.get('page',default=1)
+        page=p.page(number)
+        print(page)
     return render(request,"network/following.html",{
         "followings":following__,
-        "posts":posts,
+        "page":page,
         })
 
 
